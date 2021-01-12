@@ -4,9 +4,8 @@ a=''
 grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
     m=$(echo $g|cut -d= -f2)
-    echo $a'{ "alias":"'$n'",'
+    echo $a'{ "alias":"'$n'", "rules": { "info": "email rule", "keys": ['
     a=','
-    echo '"rules": { "info": "email rule", "keys":['
     b=''
     for k in $(echo $m); do
         r=$(gpg-key-resolve $k)
