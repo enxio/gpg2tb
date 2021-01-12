@@ -1,0 +1,2 @@
+#!/bin/bash
+gpg --with-colon -k "$1"|grep -v rvk|grep -A1 pub|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g'

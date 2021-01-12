@@ -1,0 +1,18 @@
+#!/bin/bash
+echo '{ "aliasToKeys": ['
+a=''
+grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
+    n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
+    m=$(echo $g|cut -d= -f2)
+    echo $a'{ "alias":"'$n'",'
+    a=','
+    echo '"rules": { "info": "email rule", "keys":['
+    b=''
+    for k in $(echo $m); do
+        r=$(gpg-key-resolve $k)
+        echo $b'"'$r'"'
+        b=','
+    done
+    echo '], "ignoreFailures": false } }' 
+done
+echo '] }'
