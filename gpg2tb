@@ -1,4 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+if [ $BASH_VERSINFO -lt 4 ]; then
+    echo [+] please use a bash version 4 or greater
+    exit 1
+fi
+declare -A C
 echo '{ "aliasToKeys": ['
 a=''
 grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
@@ -8,7 +13,12 @@ grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
     a=','
     b=''
     for k in $(echo $m); do
-        r=$(gpg-key-resolve $k)
+        if [ ${C[$k]+_} ]; then
+            r=${C[$k]}
+        else
+            r=$(gpg-key-resolve $k)
+            C[$k]=$r            
+        fi
         echo $b'"'$r'"'
         b=','
     done
