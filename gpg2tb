@@ -4,7 +4,7 @@ if [ $BASH_VERSINFO -ge 4 ]; then
 fi
 echo '{ "aliasToKeys": ['
 a=''
-grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
+grep ^group ${1:-~/.gnupg/gpg.conf} | grep -v '<' | while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
     m=$(echo $g|cut -d= -f2)
     echo $a'{ "alias": "'$n'", "rules": { "info": "email rule", "keys": ['
