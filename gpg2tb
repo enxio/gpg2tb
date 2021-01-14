@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-if [ $BASH_VERSINFO -lt 4 ]; then
-    # sLow mode
-    l=1
-else
+if [ $BASH_VERSINFO -ge 4 ]; then
     declare -A C
-    l=0
 fi
 echo '{ "aliasToKeys": ['
 a=''
@@ -15,7 +11,7 @@ grep ^group ~/.gnupg/gpg.conf | grep -v '<' | while read g; do
     a=','
     b=''
     for k in $(echo $m); do
-        if [ $l = 0 ]; then
+        if [ $BASH_VERSINFO -ge 4 ]; then
             if [ ${C[$k]+_} ]; then
                 r=${C[$k]}
             else
