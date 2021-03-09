@@ -2,12 +2,12 @@
 if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
     declare -A C
 fi
-echo '{ "aliasToKeys": ['
+echo '{ "description": "Thunderbird OpenPGP Alias Rules", "rules": ['
 a=''
 grep ^group ${1:-~/.gnupg/gpg.conf} | grep -v '<' | while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
     m=$(echo $g|cut -d= -f2)
-    echo $a'{ "alias": "'$n'", "rules": { "info": "email rule", "keys": ['
+    echo $a'{ "email": "'$n'", "keys": ['
     a=','
     b=''
     for k in $(echo $m); do
@@ -21,9 +21,9 @@ grep ^group ${1:-~/.gnupg/gpg.conf} | grep -v '<' | while read g; do
         else
             r=$(gpg-key-resolve $k)
         fi
-        echo $b'"'$r'"'
+        echo $b'{ "description": "'$k'", "fingerprint": "'$r'" }'
         b=','
     done
-    echo '], "ignoreFailures": false } }' 
+    echo '] }' 
 done
 echo '] }'
