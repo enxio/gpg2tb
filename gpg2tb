@@ -2,7 +2,7 @@
 if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
     declare -A C
 fi
-echo '{ "description": "Thunderbird OpenPGP Alias Rules", "rules": ['
+echo '{ "description": "Thunderbird OpenPGP Alias Rules", "rules": ['
 a=''
 grep ^group ${1:-~/.gnupg/gpg.conf} | grep -v '<' | while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
