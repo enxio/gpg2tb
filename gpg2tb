@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+resolved_key=''
+gpg_key_resolve() {
+    resolved_key=$(gpg --with-colon -k "$1"|grep -v rvk|grep -A1 pub|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g')
+}
 if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
     declare -A C
 fi
@@ -15,11 +19,13 @@ grep ^group ${1:-~/.gnupg/gpg.conf} | grep -v '<' | while read g; do
             if [ ${C[$k]+_} ]; then
                 r=${C[$k]}
             else
-                r=$(gpg-key-resolve $k)
-                C[$k]=$r            
+                gpg_key_resolve "$k"
+                r=$resolved_key
+                C[$k]=$r
             fi
         else
-            r=$(gpg-key-resolve $k)
+            gpg_key_resolve "$k"
+            r=$resolved_key
         fi
         echo $b'{ "description": "'$k'", "fingerprint": "'$r'" }'
         b=','
