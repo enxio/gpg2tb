@@ -3,7 +3,7 @@ resolved_key=''
 gpg_key_resolve() {
     resolved_key=$(gpg --with-colon -k "$1"|grep -v rvk|grep -A1 pub|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g')
 }
-if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
+if [ ${BASH_VERSINFO[0]:-0} -ge 4 ] || [ ${ZSH_VERSION:-""} != "" ]; then
     declare -A C
 fi
 cf=${1:-~/.gnupg/gpg.conf}
@@ -16,7 +16,7 @@ grep ^group "$cf"|grep -v '<'|while read g; do
     a=','
     b=''
     for k in $(echo $m); do
-        if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
+        if [ ${BASH_VERSINFO[0]:-0} -ge 4 ] || [ ${ZSH_VERSION:-""} != "" ]; then
             if [ ${C[$k]+_} ]; then
                 r=${C[$k]}
             else
