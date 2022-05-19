@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 resolved_key=''
 gpg_key_resolve() {
-    resolved_key=$(gpg --with-colon -k "$1"|grep -v rvk|grep -A1 'pub:[^e]'|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g')
+    resolved_key=$(gpg --with-colon -k "$1"|grep -v rvk|grep -A1 'pub:[^eridn]'|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g')
     #if [ -z "${resolved_key}" ]; then
     #    resolved_key="EXPIRED: "$1
     #fi
