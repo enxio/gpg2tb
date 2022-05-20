@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
+#
+# converts gpg.conf to tb alias rules
+#
+
+# For reference, here are the values for key validity
+# o    Unknown (this key is new to the system)
+# i    The key is invalid (e.g. due to a missing self-signature)
+# d    The key has been disabled (deprecated - use the ‘D’ in field 12 instead)
+# r    The key has been revoked
+# e    The key has expired
+# -    Unknown validity (i.e. no value assigned)
+# q    Undefined validity. ‘-’ and ‘q’ may safely be treated as the same value for most purposes
+# n    The key is not valid
+# m    The key is marginal valid.
+# f    The key is fully valid
+# u    The key is ultimately valid. This often means that the secret key is available, but any key may be marked as ultimately valid.
+# w    The key has a well known private part.
+# s    The key has special validity. This means that it might be self-signed and expected to be used in the STEED sytem. 
+
 resolved_key=''
 gpg_key_resolve() {
     resolved_key=$(gpg --with-colon -k "$1"|grep -v rvk|grep -A1 'pub:[^eridn]'|grep fpr|cut -d: -f10|tail -1|sed -e 's/ //g')
-    #if [ -z "${resolved_key}" ]; then
-    #    resolved_key="EXPIRED: "$1
-    #fi
 }
 if [ ${BASH_VERSINFO[0]:-0} -ge 4 ] || [ ${ZSH_VERSION:-""} != "" ]; then
     declare -A C
