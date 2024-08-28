@@ -16,7 +16,7 @@
 # f    The key is fully valid
 # u    The key is ultimately valid. This often means that the secret key is available, but any key may be marked as ultimately valid.
 # w    The key has a well known private part.
-# s    The key has special validity. This means that it might be self-signed and expected to be used in the STEED sytem. 
+# s    The key has special validity. This means that it might be self-signed and expected to be used in the STEED sytem.
 
 resolved_key=''
 gpg_key_resolve() {
@@ -28,7 +28,9 @@ fi
 cf=${1:-~/.gnupg/gpg.conf}
 echo '{ "description": "Thunderbird OpenPGP Alias Rules ('$(date)'; '$(basename "$cf")': '$(openssl dgst -sha256 -r "$cf"|cut -d' ' -f1)')", "rules": ['
 a=''
-grep ^group "$cf"|grep -v '<'|while read g; do
+# maybe use the gpgconf "API"?
+#grep ^group "$cf"|grep -v '<'|while read g; do
+gpgconf --list-options gpg|grep group|cut -d: -f 10|perl -F',"' -lne 'foreach(@F){print unless /^</};'|sed -e 's/^"//'|while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
     m=$(echo $g|cut -d= -f2)
     echo $a'{ "email": "'$n'", "keys": ['
@@ -50,6 +52,6 @@ grep ^group "$cf"|grep -v '<'|while read g; do
         echo $b'{ "description": "'$k'", "fingerprint": "'$r'" }'
         b=','
     done
-    echo '] }' 
+    echo '] }'
 done
 echo '] }'
