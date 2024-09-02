@@ -29,8 +29,8 @@ cf=${1:-~/.gnupg/gpg.conf}
 echo '{ "description": "Thunderbird OpenPGP Alias Rules ('$(date)'; '$(basename "$cf")': '$(openssl dgst -sha256 -r "$cf"|cut -d' ' -f1)')", "rules": ['
 a=''
 # maybe use the gpgconf "API"?
-#grep ^group "$cf"|grep -v '<'|while read g; do
-gpgconf --list-options gpg|grep group|cut -d: -f 10|perl -F',"' -lne 'foreach(@F){print unless /^</};'|sed -e 's/^"//'|while read g; do
+#gpgconf --list-options gpg|grep group|cut -d: -f 10|perl -F',"' -lne 'foreach(@F){print unless /^</};'|sed -e 's/^"//'|while read g; do
+grep ^group "$cf"|grep -v '<'|while read g; do
     n=$(echo $g|cut -d= -f1|cut -d' ' -f2)
     m=$(echo $g|cut -d= -f2)
     echo $a'{ "email": "'$n'", "keys": ['
