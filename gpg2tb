@@ -49,7 +49,7 @@ grep ^group "$cf"|grep -v '<'|while read g; do
             gpg_key_resolve "$k"
             r=$resolved_key
         fi
-		if [ -z "${r}" ]; then
+		if [ -z "$r" ]; then
 			continue
 		fi
         echo $b'{ "description": "'$k'", "fingerprint": "'$r'" }'
